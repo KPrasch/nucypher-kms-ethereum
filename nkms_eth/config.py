@@ -1,8 +1,6 @@
-from enum import Enum
-from os.path import dirname, join, abspath
-
 import appdirs
 import populus
+from os.path import dirname, join, abspath
 
 import nkms_eth
 
@@ -40,25 +38,6 @@ class NuCypherMinerConfig:
         __max_allowed_locked
     ]
 
-    class MinerInfoField(Enum):
-        MINERS_LENGTH = 0
-        MINER = 1
-        VALUE = 2
-        DECIMALS = 3
-        LOCKED_VALUE = 4
-        RELEASE = 5
-        MAX_RELEASE_PERIODS = 6
-        RELEASE_RATE = 7
-        CONFIRMED_PERIODS_LENGTH = 8
-        CONFIRMED_PERIOD = 9
-        CONFIRMED_PERIOD_LOCKED_VALUE = 10
-        LAST_ACTIVE_PERIOD_F = 11
-        DOWNTIME_LENGTH = 12
-        DOWNTIME_START_PERIOD = 13
-        DOWNTIME_END_PERIOD = 14
-        MINER_IDS_LENGTH = 15
-        MINER_ID = 16
-
     @property
     def null_address(self):
         return self._null_addr
@@ -72,14 +51,17 @@ class NuCypherMinerConfig:
         return self.__reward
 
 
-class PopulusConfig:
-    __project_name = 'nucypher-kms'
+class EthereumConfig:
+    __python_project_name = 'nucypher-kms'
+    # __default_solidity_dir = os.path.join()    # TODO: NKMSConfig Classes
 
-    def __init__(self, registrar_path=None):
+    def __init__(self, provider, registrar_path=None):
+
+        self.provider = provider
 
         # This config is persistent and is created in user's .local directory
         if registrar_path is None:
-            registrar_path = join(appdirs.user_data_dir(self.__project_name), 'registrar.json')
+            registrar_path = join(appdirs.user_data_dir(self.__python_project_name), 'registrar.json')
         self._registrar_path = registrar_path
 
         # Populus project config

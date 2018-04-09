@@ -1,16 +1,33 @@
 import pytest
+from web3 import Web3
+from web3.providers.eth_tester import EthereumTesterProvider
 
 from nkms_eth.agents import NuCypherKMSTokenAgent, MinerAgent, PolicyAgent
 from nkms_eth.blockchain import TheBlockchain
+<<<<<<< HEAD
 from nkms_eth.deployers import PolicyManagerDeployer
 from nkms_eth.utilities import TesterBlockchain, MockNuCypherKMSTokenDeployer, MockMinerEscrowDeployer, MockMinerAgent
 
 
 @pytest.fixture()
+=======
+from nkms_eth.config import EthereumConfig
+from nkms_eth.deployers import PolicyManagerDeployer
+from nkms_eth.utilities import TesterBlockchain, MockNuCypherKMSTokenDeployer, MockMinerEscrowDeployer, MockMinerAgent
+from eth_tester import EthereumTester
+
+
+@pytest.fixture(scope='session')
+>>>>>>> 6400353585e6bf344d8186c69c23b5789a1d035b
 def testerchain():
-    chain = TesterBlockchain()
-    yield chain
-    del chain
+    tester = EthereumTester()
+    test_provider = EthereumTesterProvider(ethereum_tester=tester)
+    web3_provider = Web3(providers=test_provider)
+    ethconfig = EthereumConfig(provider=web3_provider)
+    testerchain = TesterBlockchain(eth_config=ethconfig)
+    yield testerchain
+
+    del testerchain
     TheBlockchain._TheBlockchain__instance = None
 
 
@@ -33,13 +50,24 @@ def mock_miner_escrow_deployer(token_agent):
 
 
 @pytest.fixture()
+<<<<<<< HEAD
 def mock_policy_manager_deployer(token_agent):
     policy_manager_deployer = PolicyManagerDeployer(miner_agent=mock_miner_agent)
+=======
+def mock_policy_manager_deployer(mock_token_deployer):
+    policy_manager_deployer = PolicyManagerDeployer(token_deployer=mock_token_deployer)
+>>>>>>> 6400353585e6bf344d8186c69c23b5789a1d035b
     policy_manager_deployer.arm()
     policy_manager_deployer.deploy()
     yield policy_manager_deployer
 
+<<<<<<< HEAD
+=======
+
+#
+>>>>>>> 6400353585e6bf344d8186c69c23b5789a1d035b
 # Unused args preserve fixture dependency order #
+#
 
 @pytest.fixture()
 def token_agent(testerchain, mock_token_deployer):
